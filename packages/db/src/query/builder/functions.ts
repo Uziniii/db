@@ -1,5 +1,6 @@
 import { Aggregate, Func } from "../ir"
 import { toExpression } from "./ref-proxy.js"
+import type { RefProxyFor } from "./types"
 import type { BasicExpression } from "../ir"
 import type { RefProxy } from "./ref-proxy.js"
 import type { RefLeaf } from "./types.js"
@@ -322,6 +323,10 @@ export function min<T extends ExpressionLike>(arg: T): AggregateReturnType<T> {
 
 export function max<T extends ExpressionLike>(arg: T): AggregateReturnType<T> {
   return new Aggregate(`max`, [toExpression(arg)]) as AggregateReturnType<T>
+}
+
+export function list<T>(arg: RefProxy<T> | RefProxyFor<T>): Aggregate<T> {
+  return new Aggregate(`list`, [toExpression(arg)])
 }
 
 /**
