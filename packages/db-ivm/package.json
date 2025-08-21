@@ -1,5 +1,5 @@
 {
-  "name": "@uzini/db-ivm",
+  "name": "@tanstack/db-ivm",
   "description": "Incremental View Maintenance for TanStack DB based on Differential Dataflow",
   "version": "0.1.2",
   "dependencies": {

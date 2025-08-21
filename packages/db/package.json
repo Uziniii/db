@@ -1,5 +1,5 @@
 {
-  "name": "@uzini/db",
+  "name": "@tanstack/db",
   "description": "A reactive client store for building super fast apps on sync",
   "version": "0.1.5",
   "dependencies": {
