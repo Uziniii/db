@@ -267,7 +267,9 @@ export function max(
   return new Aggregate(`max`, [toExpression(arg)])
 }
 
-export function list<T>(arg: RefProxy<T> | RefProxyFor<T>): Aggregate<T> {
+export function list<T>(
+  arg: RefProxy<T> | RefProxyFor<T>
+): Aggregate<Array<T>> {
   return new Aggregate(`list`, [toExpression(arg)])
 }
 
