@@ -325,7 +325,9 @@ export function max<T extends ExpressionLike>(arg: T): AggregateReturnType<T> {
   return new Aggregate(`max`, [toExpression(arg)]) as AggregateReturnType<T>
 }
 
-export function list<T>(arg: RefProxy<T> | RefProxyFor<T>): Aggregate<T> {
+export function list<T>(
+  arg: RefProxy<T> | RefProxyFor<T>
+): Aggregate<Array<T>> {
   return new Aggregate(`list`, [toExpression(arg)])
 }
 
