@@ -1,5 +1,26 @@
 # @tanstack/db
 
+## 0.1.9
+
+### Patch Changes
+
+- Fix handling of Temporal objects in proxy's deepClone and deepEqual functions ([#434](https://github.com/TanStack/db/pull/434))
+  - Temporal objects (like Temporal.ZonedDateTime) are now properly preserved during cloning instead of being converted to empty objects
+  - Added detection for all Temporal API object types via Symbol.toStringTag
+  - Temporal objects are returned directly from deepClone since they're immutable
+  - Added proper equality checking for Temporal objects using their built-in equals() method
+  - Prevents unnecessary proxy creation for immutable Temporal objects
+
+## 0.1.8
+
+### Patch Changes
+
+- Fix bug that caused initial query results to have too few rows when query has orderBy, limit, and where clauses. ([#461](https://github.com/TanStack/db/pull/461))
+
+- fix disabling of gc by setting `gcTime: 0` on the collection options ([#463](https://github.com/TanStack/db/pull/463))
+
+- docs: electric-collection reference page ([#429](https://github.com/TanStack/db/pull/429))
+
 ## 0.1.7
 
 ### Patch Changes
