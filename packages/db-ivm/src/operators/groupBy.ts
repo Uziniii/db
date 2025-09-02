@@ -347,7 +347,8 @@ export function mode<T>(
 }
 
 /**
- * Creates a string aggregate function
+ * Creates a list aggregate function that collects all values into an array
+ * @param valueExtractor Function to extract a value from each data entry
  */
 export function list<T, V>(
   valueExtractor: (value: T) => V = (v) => v as unknown as V

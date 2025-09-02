@@ -342,7 +342,7 @@ function getAggregateFunction(aggExpr: Aggregate) {
   // Pre-compile the value extractor expression
   const compiledExpr = compileExpression(aggExpr.args[0]!)
 
-  // Create a value extractor function for the expression to aggregate
+  // Create a number only value extractor function for the expression to aggregate
   const numericValueExtractor = ([, namespacedRow]: [
     string,
     NamespacedRow,
@@ -352,6 +352,7 @@ function getAggregateFunction(aggExpr: Aggregate) {
     return typeof value === `number` ? value : value != null ? Number(value) : 0
   }
 
+  // Create a generic value extractor function for non-numeric aggregates
   const anyValueExtractor = ([, namespacedRow]: [string, NamespacedRow]) => {
     return compiledExpr(namespacedRow)
   }
