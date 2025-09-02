@@ -343,28 +343,34 @@ function getAggregateFunction(aggExpr: Aggregate) {
   const compiledExpr = compileExpression(aggExpr.args[0]!)
 
   // Create a value extractor function for the expression to aggregate
-  const valueExtractor = ([, namespacedRow]: [string, NamespacedRow]) => {
+  const numericValueExtractor = ([, namespacedRow]: [
+    string,
+    NamespacedRow,
+  ]) => {
     const value = compiledExpr(namespacedRow)
     // Ensure we return a number for numeric aggregate functions
-    return value
+    return typeof value === `number` ? value : value != null ? Number(value) : 0
+  }
+
+  const anyValueExtractor = ([, namespacedRow]: [string, NamespacedRow]) => {
+    return compiledExpr(namespacedRow)
   }
 
   // Return the appropriate aggregate function
   switch (aggExpr.name.toLowerCase()) {
     case `sum`:
-      return sum(valueExtractor)
+      return sum(numericValueExtractor)
     case `count`:
       return count() // count() doesn't need a value extractor
     case `avg`:
-      return avg(valueExtractor)
+      return avg(numericValueExtractor)
     case `min`:
-      return min(valueExtractor)
+      return min(numericValueExtractor)
     case `max`:
-      return max(valueExtractor)
+      return max(numericValueExtractor)
     case `list`:
-      return list(valueExtractor)
+      return list(anyValueExtractor)
     default:
-      console.log(aggExpr)
       throw new UnsupportedAggregateFunctionError(aggExpr.name)
   }
 }

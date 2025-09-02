@@ -350,7 +350,7 @@ export function list<T, V>(
   valueExtractor: (value: T) => V = (v) => v as unknown as V
 ): AggregateFunction<T, Array<V>, V> {
   return {
-    preMap: (data: T) => valueExtractor(data) as unknown as V,
+    preMap: (data: T) => valueExtractor(data),
     reduce: (values) => {
       const total = []
 
@@ -359,9 +359,6 @@ export function list<T, V>(
       }
 
       return total as unknown as V
-    },
-    postMap(result) {
-      return result as unknown as Array<V>
     },
   }
 }
