@@ -322,6 +322,7 @@ function createGroupByTests(autoIndex: `off` | `eager`): void {
               .groupBy(({ orders }) => orders.status)
               .select(({ orders }) => ({
                 status: orders.status,
+                customer_ids: list(orders.customer_id),
                 total_amount: sum(orders.amount),
                 order_count: count(orders.id),
                 avg_amount: avg(orders.amount),
@@ -333,6 +334,7 @@ function createGroupByTests(autoIndex: `off` | `eager`): void {
         // Completed orders: 1, 2, 4, 7 (amounts: 100, 200, 300, 400)
         const completed = statusSummary.get(`completed`)
         expect(completed?.status).toBe(`completed`)
+        expect(completed?.customer_ids).toEqual([1, 1, 2, 1])
         expect(completed?.total_amount).toBe(1000)
         expect(completed?.order_count).toBe(4)
         expect(completed?.avg_amount).toBe(250)
@@ -340,6 +342,7 @@ function createGroupByTests(autoIndex: `off` | `eager`): void {
         // Pending orders: 3, 5 (amounts: 150, 250)
         const pending = statusSummary.get(`pending`)
         expect(pending?.status).toBe(`pending`)
+        expect(pending?.customer_ids).toEqual([2, 3])
         expect(pending?.total_amount).toBe(400)
         expect(pending?.order_count).toBe(2)
         expect(pending?.avg_amount).toBe(200)
@@ -347,6 +350,7 @@ function createGroupByTests(autoIndex: `off` | `eager`): void {
         // Cancelled orders: 6 (amount: 75)
         const cancelled = statusSummary.get(`cancelled`)
         expect(cancelled?.status).toBe(`cancelled`)
+        expect(cancelled?.customer_ids).toEqual([3])
         expect(cancelled?.total_amount).toBe(75)
         expect(cancelled?.order_count).toBe(1)
         expect(cancelled?.avg_amount).toBe(75)
@@ -361,7 +365,6 @@ function createGroupByTests(autoIndex: `off` | `eager`): void {
               .groupBy(({ orders }) => orders.product_category)
               .select(({ orders }) => ({
                 product_category: orders.product_category,
-                product_ids: list(orders),
                 total_quantity: sum(orders.quantity),
                 order_count: count(orders.id),
                 total_amount: sum(orders.amount),
@@ -372,7 +375,6 @@ function createGroupByTests(autoIndex: `off` | `eager`): void {
 
         // Electronics: orders 1, 2, 4, 6 (quantities: 2, 1, 1, 1)
         const electronics = categorySummary.get(`electronics`)
-        console.log(electronics)
         expect(electronics?.product_category).toBe(`electronics`)
         expect(electronics?.total_quantity).toBe(5)
         expect(electronics?.order_count).toBe(4)

@@ -132,7 +132,7 @@ describe(`Operators`, () => {
       expect(result).toEqual(expectedResult)
     })
 
-    test(`with single stringAgg aggregate`, () => {
+    test(`with single list aggregate`, () => {
       const graph = new D2()
       const input = graph.newInput<{
         productId: number
