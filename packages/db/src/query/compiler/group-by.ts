@@ -342,16 +342,11 @@ function getAggregateFunction(aggExpr: Aggregate) {
   // Pre-compile the value extractor expression
   const compiledExpr = compileExpression(aggExpr.args[0]!)
 
-  // Create a number only value extractor function for the expression to aggregate
-  const numberExtractor = ([, namespacedRow]: [string, NamespacedRow]) => {
+  // Create a value extractor function for the expression to aggregate
+  const valueExtractor = ([, namespacedRow]: [string, NamespacedRow]) => {
     const value = compiledExpr(namespacedRow)
     // Ensure we return a number for numeric aggregate functions
     return typeof value === `number` ? value : value != null ? Number(value) : 0
-  }
-
-  // Create a generic value extractor function for non-numeric aggregates
-  const valueExtractor = ([, namespacedRow]: [string, NamespacedRow]) => {
-    return compiledExpr(namespacedRow)
   }
 
   // Create a raw value extractor function for the expression to aggregate
@@ -362,17 +357,17 @@ function getAggregateFunction(aggExpr: Aggregate) {
   // Return the appropriate aggregate function
   switch (aggExpr.name.toLowerCase()) {
     case `sum`:
-      return sum(numberExtractor)
+      return sum(valueExtractor)
     case `count`:
       return count(rawValueExtractor)
     case `avg`:
-      return avg(numberExtractor)
+      return avg(valueExtractor)
     case `min`:
-      return min(numberExtractor)
+      return min(valueExtractor)
     case `max`:
-      return max(numberExtractor)
+      return max(valueExtractor)
     case `list`:
-      return list(valueExtractor)
+      return list(rawValueExtractor)
     default:
       throw new UnsupportedAggregateFunctionError(aggExpr.name)
   }
